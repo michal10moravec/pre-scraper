@@ -51,6 +51,7 @@ module.exports = () => {
                 )
             }
         } catch (err) {
+            logger('Error crawling', err)
             res.writeHead(500)
             res.end(err.message)
         }

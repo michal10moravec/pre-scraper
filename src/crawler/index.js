@@ -3,12 +3,15 @@ const login = require('./login')
 const today = require('./today')
 const tomorrow = require('./tomorrow')
 
-const { PRE_LOGIN_PAGE } = require('../config')
+const { PRE_LOGIN_PAGE, PUPPETEER_BROWSER_EXECUTABLE_PATH } = require('../config')
 
 const puppeteer = require('puppeteer')
 
 module.exports = async () => {
-    const browser = await puppeteer.launch()
+    const browser = await puppeteer.launch({
+        product: 'chrome',
+        executablePath: PUPPETEER_BROWSER_EXECUTABLE_PATH,
+    })
     const page = await browser.newPage()
 
     await page.goto(PRE_LOGIN_PAGE)
