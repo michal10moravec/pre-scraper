@@ -23,8 +23,8 @@ module.exports = () => {
             const tomorrowDate = getTomorrowDate()
             const todayFormatted = formatDate(todayDate)
             const tomorrowFormatted = formatDate(tomorrowDate)
-            const todayDayName = getDayName(todayDate)
-            const tomorrowDayName = getDayName(tomorrowDate)
+            const todayDayName = getDayName(todayDate).padEnd(7, ' ')
+            const tomorrowDayName = getDayName(tomorrowDate).padEnd(7, ' ')
 
             if (
                 hasDate(todayFormatted, times) &&
@@ -33,7 +33,7 @@ module.exports = () => {
                 logger('Times found in cache, returning')
                 res.writeHead(200, headers)
                 res.end(
-                    `${todayDayName} - ${todayFormatted}: ${times[todayFormatted]}\n${tomorrowDayName} - ${tomorrowFormatted}: ${times[tomorrowFormatted]}`
+                    `${todayDayName} ${todayFormatted}: ${times[todayFormatted]}\n${tomorrowDayName} ${tomorrowFormatted}: ${times[tomorrowFormatted]}`
                 )
             } else {
                 logger('Times not found in cache, crawling')
@@ -47,7 +47,7 @@ module.exports = () => {
                 logger('Saved new times to cache')
                 res.writeHead(200, headers)
                 res.end(
-                    `${todayDayName} -${todayFormatted}: ${todayTimes}\n${tomorrowDayName} - ${tomorrowFormatted}: ${tomorrowTimes}`
+                    `${todayDayName} ${todayFormatted}: ${todayTimes}\n${tomorrowDayName} ${tomorrowFormatted}: ${tomorrowTimes}`
                 )
             }
         } catch (err) {
