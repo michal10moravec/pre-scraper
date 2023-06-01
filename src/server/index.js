@@ -6,22 +6,34 @@ const {
     getTomorrowDate,
     hasDate,
     formatDate,
+    getDayName,
 } = require('../time')
 const crawler = require('../crawler')
 const logger = require('../logger')
+
+const headers = {
+    'Content-Type': 'text/plain; charset=utf-8',
+}
 
 module.exports = () => {
     const requestListener = async (req, res) => {
         try {
             const times = await read(TIMES_FILE_PATH)
-            const todayDate = formatDate(getCurrentDate())
-            const tomorrowDate = formatDate(getTomorrowDate())
+            const todayDate = getCurrentDate()
+            const tomorrowDate = getTomorrowDate()
+            const todayFormatted = formatDate(todayDate)
+            const tomorrowFormatted = formatDate(tomorrowDate)
+            const todayDayName = getDayName(todayDate)
+            const tomorrowDayName = getDayName(tomorrowDate)
 
-            if (hasDate(todayDate, times) && hasDate(tomorrowDate, times)) {
+            if (
+                hasDate(todayFormatted, times) &&
+                hasDate(tomorrowFormatted, times)
+            ) {
                 logger('Times found in cache, returning')
-                res.writeHead(200)
+                res.writeHead(200, headers)
                 res.end(
-                    `${todayDate}: ${times[todayDate]}\n${tomorrowDate}: ${times[tomorrowDate]}`
+                    `${todayDayName} - ${todayFormatted}: ${times[todayFormatted]}\n${tomorrowDayName} - ${tomorrowFormatted}: ${times[tomorrowFormatted]}`
                 )
             } else {
                 logger('Times not found in cache, crawling')
@@ -29,13 +41,13 @@ module.exports = () => {
                 logger('Crawling finished, saving times to cache')
                 await write({
                     ...times,
-                    [todayDate]: todayTimes,
-                    [tomorrowDate]: tomorrowTimes,
+                    [todayFormatted]: todayTimes,
+                    [tomorrowFormatted]: tomorrowTimes,
                 })
                 logger('Saved new times to cache')
-                res.writeHead(200)
+                res.writeHead(200, headers)
                 res.end(
-                    `${todayDate}: ${todayTimes}\n${tomorrowDate}: ${tomorrowTimes}`
+                    `${todayDayName} -${todayFormatted}: ${todayTimes}\n${tomorrowDayName} - ${tomorrowFormatted}: ${tomorrowTimes}`
                 )
             }
         } catch (err) {
