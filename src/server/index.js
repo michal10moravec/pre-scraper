@@ -33,7 +33,7 @@ module.exports = () => {
                 logger('Times found in cache, returning')
                 res.writeHead(200, headers)
                 res.end(
-                    `${todayDayName} ${todayFormatted}: ${times[todayFormatted]}\n${tomorrowDayName} ${tomorrowFormatted}: ${times[tomorrowFormatted]}`
+                    `${todayDayName} ${todayFormatted} ${times[todayFormatted]}\n${tomorrowDayName} ${tomorrowFormatted}: ${times[tomorrowFormatted]}`
                 )
             } else {
                 logger('Times not found in cache, crawling')
@@ -47,11 +47,11 @@ module.exports = () => {
                 logger('Saved new times to cache')
                 res.writeHead(200, headers)
                 res.end(
-                    `${todayDayName} ${todayFormatted}: ${todayTimes}\n${tomorrowDayName} ${tomorrowFormatted}: ${tomorrowTimes}`
+                    `${todayDayName} ${todayFormatted} ${todayTimes}\n${tomorrowDayName} ${tomorrowFormatted}: ${tomorrowTimes}`
                 )
             }
         } catch (err) {
-            logger('Error crawling', err)
+            logger('Error crawling', err.message, err.stack)
             res.writeHead(500)
             res.end(err.message)
         }
