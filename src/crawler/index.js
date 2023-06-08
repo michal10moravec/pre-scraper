@@ -3,19 +3,16 @@ const login = require('./login')
 const today = require('./today')
 const tomorrow = require('./tomorrow')
 
-const { PRE_LOGIN_PAGE, PUPPETEER_BROWSER_EXECUTABLE_PATH } = require('../config')
+const { PRE_LOGIN_PAGE, BROWSER_EXECUTABLE_PATH } = require('../config')
 
-const puppeteer = require('puppeteer')
+const { chromium } = require('playwright')
 
 module.exports = async () => {
-    const browser = await puppeteer.launch({
-        product: 'chrome',
-        executablePath: PUPPETEER_BROWSER_EXECUTABLE_PATH,
-    })
+    const browser = await chromium.launch({ executablePath: BROWSER_EXECUTABLE_PATH });
     const page = await browser.newPage()
 
     await page.goto(PRE_LOGIN_PAGE)
-    await page.setViewport({ width: 1920, height: 1080 })
+    await page.setViewportSize({ width: 1920, height: 1080 })
 
     await cookies(page)
     await login(page)
