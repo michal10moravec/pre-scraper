@@ -23,14 +23,19 @@ const getTomorrowDate = () => {
     return getDate(tomorrow)
 }
 
-const hasDate = (date, dates) => {
-    return typeof dates[date] !== 'undefined'
+const hasDateInCache = (date, cache) => {
+    return typeof cache[date] !== 'undefined'
+}
+
+const hasDatesInCache = (dates, cache) => {
+    return dates.every(date => hasDateInCache(date, cache))
 }
 
 module.exports = {
     getCurrentDate,
     getTomorrowDate,
-    hasDate,
+    hasDateInCache,
+    hasDatesInCache,
     formatDate,
     getDayName,
 }
