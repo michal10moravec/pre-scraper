@@ -1,7 +1,7 @@
 const cron = require('node-cron')
 
 const setupCron = () => {
-    cron.schedule('1 0 * * *', async () => {
+    cron.schedule('0 3 * * *', async () => {
         logger('Running cron job')
         const cache = await read(TIMES_FILE_PATH)
         const todayDate = getCurrentDate()
