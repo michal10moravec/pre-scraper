@@ -3,7 +3,7 @@ Description=PreCrawler
 After=network.target
 
 [Service]
-ExecStart=/home/pi/.nvm/versions/node/v18.16.0/bin/node index.js
+ExecStart=/home/pi/.nvm/versions/node/v18.16.0/bin/node build/index.js
 
 WorkingDirectory=/home/pi/GitHub/pre-scraper
 StandardOutput=syslog
