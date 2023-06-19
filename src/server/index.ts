@@ -1,21 +1,15 @@
-const http = require('http')
-const fs = require('fs')
-const { SERVER_HOST, SERVER_PORT, TIMES_FILE_PATH } = require('../config')
-const { read, write } = require('../files')
-const {
-    getCurrentDate,
-    getTomorrowDate,
-    hasDatesInCache,
-    formatDate,
-    getDayName,
-} = require('../time')
-const crawler = require('../crawler')
-const logger = require('../logger')
-const { getPage, getStyles } = require('./html')
+import http, { IncomingMessage, ServerResponse } from 'http'
+import fs from 'fs'
+import { SERVER_HOST, SERVER_PORT } from '../config'
+import { read, write } from '../files'
+import { getCurrentDate, getTomorrowDate, hasDatesInCache, formatDate, getDayName } from '../time'
+import crawler from '../crawler'
+import logger from '../logger'
+import { getPage, getStyles } from './html'
 
-const handleIndex = async (res) => {
+const handleIndex = async (res: ServerResponse) => {
     try {
-        let cache = await read(TIMES_FILE_PATH)
+        let cache = await read()
         const todayDate = getCurrentDate()
         const tomorrowDate = getTomorrowDate()
         const todayFormatted = formatDate(todayDate)
@@ -33,7 +27,7 @@ const handleIndex = async (res) => {
                 [tomorrowFormatted]: tomorrowTimes,
             })
             logger('Saved new times to cache')
-            cache = await read(TIMES_FILE_PATH)
+            cache = await read()
         }
         const todayCache = cache[todayFormatted]
         const tomorrowCache = cache[tomorrowFormatted]
@@ -53,31 +47,31 @@ const handleIndex = async (res) => {
             )
         )
         res.end()
-    } catch (err) {
+    } catch (err: any) {
         logger('Error crawling', err.message, err.stack)
         res.writeHead(500)
         res.end(err.message)
     }
 }
 
-const handleFavicon = (res) => {
+const handleFavicon = (res: ServerResponse) => {
     res.writeHead(200, { 'content-type': 'image/x-icon' })
     fs.createReadStream('./favicon.ico').pipe(res)
 }
 
-const handleStyles = (res) => {
+const handleStyles = (res: ServerResponse) => {
     res.writeHead(200, { 'content-type': 'text/css' })
     res.end(getStyles())
 }
 
-const handleDefault = (url, res) => {
+const handleDefault = (url: string = '', res: ServerResponse) => {
     logger('Url', url, 'not found')
     res.writeHead(404)
     res.end(`Url ${url} not found`)
 }
 
-module.exports = () => {
-    const requestListener = async (req, res) => {
+export default () => {
+    const requestListener = async (req: IncomingMessage, res: ServerResponse) => {
         switch (req.url) {
             case '/':
                 handleIndex(res)

@@ -1,7 +1,16 @@
-const formatDate = (date) => `${date.day}.${date.month}.${date.year}`
-const getDayName = (date) => `${date.dayName}`
+import { TCache } from "../files"
 
-const getDate = (unixTime) => {
+type TDate = {
+    day: number,
+    month: number,
+    year: number,
+    dayName: string
+}
+
+const formatDate = (date: TDate) => `${date.day}.${date.month}.${date.year}`
+const getDayName = (date: TDate) => `${date.dayName}`
+
+const getDate = (unixTime: number) => {
     let date_ob = new Date(unixTime)
     const day = date_ob.getDate()
     const month = date_ob.getMonth() + 1
@@ -20,18 +29,18 @@ const getTomorrowDate = () => {
     const today = new Date()
     const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
-    return getDate(tomorrow)
+    return getDate(tomorrow.getTime())
 }
 
-const hasDateInCache = (date, cache) => {
+const hasDateInCache = (date: string, cache: TCache) => {
     return typeof cache[date] !== 'undefined'
 }
 
-const hasDatesInCache = (dates, cache) => {
+const hasDatesInCache = (dates: string[], cache: TCache) => {
     return dates.every(date => hasDateInCache(date, cache))
 }
 
-module.exports = {
+export {
     getCurrentDate,
     getTomorrowDate,
     hasDateInCache,

@@ -1,19 +1,13 @@
-const cron = require('node-cron')
-const { TIMES_FILE_PATH } = require('../config')
-const { read, write } = require('../files')
-const {
-    getCurrentDate,
-    getTomorrowDate,
-    hasDatesInCache,
-    formatDate,
-} = require('../time')
-const crawler = require('../crawler')
-const logger = require('../logger')
+import cron from 'node-cron'
+import { read, write } from '../files'
+import { getCurrentDate, getTomorrowDate, hasDatesInCache, formatDate } from '../time'
+import crawler from '../crawler'
+import logger from '../logger'
 
-const setupCron = () => {
+export default () => {
     cron.schedule('0 3 * * *', async () => {
         logger('Running cron job')
-        const cache = await read(TIMES_FILE_PATH)
+        const cache = await read()
         const todayDate = getCurrentDate()
         const tomorrowDate = getTomorrowDate()
         const todayFormatted = formatDate(todayDate)
@@ -33,5 +27,3 @@ const setupCron = () => {
         logger('Cron job ended')
     })
 }
-
-module.exports = setupCron

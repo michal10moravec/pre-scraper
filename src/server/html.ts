@@ -3,11 +3,13 @@ const DAY = 'Den'
 const DATE = 'Datum'
 const TIMES = 'Časy spínání'
 
-const getHeader = (text) => {
+type TData = string[][]
+
+const getHeader = (text: string) => {
     return `<h1>${text}</h1>`
 }
 
-const getTable = (header, data, dataLen) => {
+const getTable = (header: string[], data: TData, dataLen: number) => {
     return `<table>
     <tr>${header
         .map(
@@ -25,7 +27,7 @@ const getTable = (header, data, dataLen) => {
 </table>`
 }
 
-const getHtml = (...components) => {
+const getHtml = (...components: string[]) => {
     return `<html>
     <head>
         <title>${PRE_TITLE}</title>
@@ -46,14 +48,14 @@ td {
 }`
 }
 
-const getPage = (data, dataLen) => {
+const getPage = (data: TData, dataLen: number) => {
     return getHtml(
         getHeader(PRE_TITLE),
         getTable([DAY, DATE, TIMES], data, dataLen)
     )
 }
 
-module.exports = {
+export {
     getHtml,
     getHeader,
     getPage,

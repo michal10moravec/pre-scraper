@@ -1,7 +1,8 @@
-const { PRE_USERNAME, PRE_PASSWORD } = require('../config')
-const log = require('../logger')
+import { Page } from 'playwright'
+import { PRE_USERNAME, PRE_PASSWORD } from '../config'
+import log from '../logger'
 
-module.exports = async (page) => {
+export default async (page: Page) => {
     await page.type('#login_name', PRE_USERNAME)
     await page.type('#login_password', PRE_PASSWORD)
     log('Filled in credentials')

@@ -1,13 +1,13 @@
-const cookies = require('./cookies')
-const login = require('./login')
-const today = require('./today')
-const tomorrow = require('./tomorrow')
+import cookies from './cookies'
+import login from './login'
+import today from './today'
+import tomorrow from './tomorrow'
 
-const { PRE_LOGIN_PAGE, BROWSER_EXECUTABLE_PATH } = require('../config')
+import { PRE_LOGIN_PAGE, BROWSER_EXECUTABLE_PATH } from '../config'
 
-const { chromium } = require('playwright')
+import { chromium } from 'playwright'
 
-module.exports = async () => {
+export default async () => {
     const browser = await chromium.launch({ executablePath: BROWSER_EXECUTABLE_PATH });
     const page = await browser.newPage()
 
