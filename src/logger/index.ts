@@ -1,3 +1,3 @@
-export default (...message: string[]) => {
+export default (...message: any[]) => {
     console.log(...message)
 }

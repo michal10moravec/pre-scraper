@@ -1,6 +1,11 @@
 import cron from 'node-cron'
 import { read, write } from '../files'
-import { getCurrentDate, getTomorrowDate, hasDatesInCache, formatDate } from '../time'
+import {
+    getCurrentDate,
+    getTomorrowDate,
+    hasDatesInCache,
+    formatDate,
+} from '../time'
 import crawler from '../crawler'
 import logger from '../logger'
 

@@ -8,7 +8,9 @@ import { PRE_LOGIN_PAGE, BROWSER_EXECUTABLE_PATH } from '../config'
 import { chromium } from 'playwright'
 
 export default async () => {
-    const browser = await chromium.launch({ executablePath: BROWSER_EXECUTABLE_PATH });
+    const browser = await chromium.launch({
+        executablePath: BROWSER_EXECUTABLE_PATH,
+    })
     const page = await browser.newPage()
 
     await page.goto(PRE_LOGIN_PAGE)

@@ -1,9 +1,10 @@
-import { TCache } from "../files"
+import { TCache } from '../files'
+import logger from '../logger'
 
 type TDate = {
-    day: number,
-    month: number,
-    year: number,
+    day: number
+    month: number
+    year: number
     dayName: string
 }
 
@@ -32,17 +33,37 @@ const getTomorrowDate = () => {
     return getDate(tomorrow.getTime())
 }
 
+const parseDateFromCache = (inputDate: string) => {
+    const [day, month, year] = inputDate.split('.')
+    const outputDate = new Date(
+        Number(year),
+        Number(month) - 1,
+        Number(day),
+        0,
+        0,
+        0
+    )
+    return outputDate
+}
+
+const getCustomDate = (date: Date) => {
+    const day = new Date(date)
+    return getDate(day.getTime())
+}
+
 const hasDateInCache = (date: string, cache: TCache) => {
     return typeof cache[date] !== 'undefined'
 }
 
 const hasDatesInCache = (dates: string[], cache: TCache) => {
-    return dates.every(date => hasDateInCache(date, cache))
+    return dates.every((date) => hasDateInCache(date, cache))
 }
 
 export {
     getCurrentDate,
     getTomorrowDate,
+    parseDateFromCache,
+    getCustomDate,
     hasDateInCache,
     hasDatesInCache,
     formatDate,

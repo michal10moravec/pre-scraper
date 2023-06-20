@@ -55,9 +55,4 @@ const getPage = (data: TData, dataLen: number) => {
     )
 }
 
-export {
-    getHtml,
-    getHeader,
-    getPage,
-    getStyles,
-}
+export { getHtml, getHeader, getPage, getStyles }

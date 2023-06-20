@@ -2,7 +2,15 @@ import http, { IncomingMessage, ServerResponse } from 'http'
 import fs from 'fs'
 import { SERVER_HOST, SERVER_PORT } from '../config'
 import { read, write } from '../files'
-import { getCurrentDate, getTomorrowDate, hasDatesInCache, formatDate, getDayName } from '../time'
+import {
+    getCurrentDate,
+    getTomorrowDate,
+    hasDatesInCache,
+    formatDate,
+    getDayName,
+    getCustomDate,
+    parseDateFromCache,
+} from '../time'
 import crawler from '../crawler'
 import logger from '../logger'
 import { getPage, getStyles } from './html'
@@ -54,6 +62,23 @@ const handleIndex = async (res: ServerResponse) => {
     }
 }
 
+const handleHistory = async (res: ServerResponse) => {
+    const cache = await read()
+    const dataLen = Object.keys(cache).length
+    const page = getPage(
+        Object.entries(cache).map(([key, value]) => [
+            getDayName(getCustomDate(parseDateFromCache(key))),
+            key,
+            ...value,
+        ]),
+        dataLen
+    )
+    logger('Returning all cached times')
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' })
+    res.write(page)
+    res.end()
+}
+
 const handleFavicon = (res: ServerResponse) => {
     res.writeHead(200, { 'content-type': 'image/x-icon' })
     fs.createReadStream('./favicon.ico').pipe(res)
@@ -71,10 +96,16 @@ const handleDefault = (url: string = '', res: ServerResponse) => {
 }
 
 export default () => {
-    const requestListener = async (req: IncomingMessage, res: ServerResponse) => {
+    const requestListener = async (
+        req: IncomingMessage,
+        res: ServerResponse
+    ) => {
         switch (req.url) {
             case '/':
                 handleIndex(res)
+                break
+            case '/history':
+                handleHistory(res)
                 break
             case '/favicon.ico':
                 handleFavicon(res)
